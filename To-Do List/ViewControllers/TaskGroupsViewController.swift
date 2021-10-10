@@ -5,8 +5,8 @@
 //  Created by Igor on 10.10.2021.
 //
 
-import Foundation
 import RealmSwift
+import UIKit
 
 class TaskGroupsViewController: UIViewController {
     // MARK: IBOutlets
@@ -22,7 +22,6 @@ class TaskGroupsViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
         createDemoData()
         taskGroups = StorageManager.shared.realm.objects(TaskGroup.self)
     }
@@ -132,5 +131,17 @@ extension TaskGroupsViewController: UITableViewDelegate {
         editAction.backgroundColor = .systemOrange
         
         return UISwipeActionsConfiguration(actions: [editAction, deteleAction])
+    }
+    
+    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        let taskGroup = taskGroups[indexPath.row]
+
+        let doneAction = UIContextualAction(style: .normal, title: "All Done") { _, _, isDone in
+            StorageManager.shared.done(taskGroup)
+            isDone(true)
+        }
+        doneAction.backgroundColor = .systemGreen
+
+        return UISwipeActionsConfiguration(actions: [doneAction])
     }
 }
