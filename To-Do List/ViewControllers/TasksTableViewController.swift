@@ -33,20 +33,27 @@ class TasksTableViewController: UITableViewController {
     @IBAction func addButtonPressed(_ sender: UIBarButtonItem) {
         showAlert()
     }
+}
 
-    // MARK: Private Methods
+// MARK: - Alert Controller
 
-    private func showAlert() {
+extension TasksTableViewController {
+    private func showAlert(with task: Task? = nil, completion: (() -> Void)? = nil) {
         let alert = CustomAlert.groupAlert(title: "Add task", subtitle: "What do you want to add?")
 
-        alert.addTaskAction { taskTitle, taskNote in
-            self.saveNewTask(taskTitle: taskTitle, taskNote: taskNote)
+        alert.addTaskAction(with: task) { newTitle, newNote in
+            if let task = task, let completion = completion {
+                StorageManager.shared.edit(task, newTitle: newTitle, newNote: newNote)
+                completion()
+            } else {
+                self.save(newTitle, newNote)
+            }
         }
 
         present(alert, animated: true)
     }
 
-    private func saveNewTask(taskTitle: String, taskNote: String?) {
+    private func save(_ taskTitle: String, _ taskNote: String?) {
         let newTask = Task(value: [taskTitle, taskNote])
         StorageManager.shared.save(task: newTask, to: taskGroup)
 
@@ -81,5 +88,63 @@ extension TasksTableViewController {
         cell.contentConfiguration = content
 
         return cell
+    }
+}
+
+// MARK: - UITableViewDelegate
+
+extension TasksTableViewController {
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+    }
+
+    override func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        let task = indexPath.section == 0 ? activeTasks[indexPath.row] : completedTasks[indexPath.row]
+
+        let deteleAction = UIContextualAction(style: .destructive, title: "Delete") { _, _, _ in
+            StorageManager.shared.delete(task)
+            tableView.deleteRows(at: [indexPath], with: .automatic)
+        }
+
+        let editAction = UIContextualAction(style: .normal, title: "Edit") { _, _, isDone in
+            self.showAlert(with: task) {
+                tableView.reloadRows(at: [indexPath], with: .automatic)
+            }
+
+            isDone(true)
+        }
+        editAction.backgroundColor = .systemOrange
+
+        return UISwipeActionsConfiguration(actions: [editAction, deteleAction])
+    }
+
+    override func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        if indexPath.section == 0 {
+            let task = activeTasks[indexPath.row]
+
+            let doneAction = UIContextualAction(style: .normal, title: "Done") { _, _, isDone in
+                StorageManager.shared.editStatus(task, status: true)
+                isDone(true)
+
+                let completedTasksRowIndex = IndexPath(row: self.completedTasks.index(of: task) ?? 0, section: 1)
+                self.tableView.moveRow(at: indexPath, to: completedTasksRowIndex)
+            }
+            doneAction.backgroundColor = .systemGreen
+
+            return UISwipeActionsConfiguration(actions: [doneAction])
+        }
+
+        let task = completedTasks[indexPath.row]
+
+        let undoneAction = UIContextualAction(style: .normal, title: "Undone") { _, _, isDone in
+            StorageManager.shared.editStatus(task, status: false)
+            isDone(true)
+
+            let activeTasksRowIndex = IndexPath(row: self.activeTasks.index(of: task) ?? 0, section: 0)
+            self.tableView.moveRow(at: indexPath, to: activeTasksRowIndex)
+        }
+        undoneAction.backgroundColor = .systemPink
+
+        return UISwipeActionsConfiguration(actions: [undoneAction])
     }
 }

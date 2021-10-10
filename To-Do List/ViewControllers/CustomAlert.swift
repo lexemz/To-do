@@ -35,17 +35,15 @@ class CustomAlert: UIAlertController {
         }
     }
     
-    func addTaskAction(completionHandler: @escaping (String, String) -> Void) {
-        let saveAction = UIAlertAction(title: "Save", style: .default) { _ in
-            guard let taskName = self.textFields?.first?.text else { return }
-            guard !taskName.isEmpty else { return }
-            
-            if let taskNote = self.textFields?.last?.text, !taskNote.isEmpty {
-                completionHandler(taskName, taskNote)
-            } else {
-                completionHandler(taskName, "")
-            }
-            
+    func addTaskAction(with task: Task? = nil, completionHandler: @escaping (String, String) -> Void) {
+        
+        if task != nil { confirmButtonTitle = "Edit" }
+        
+        let saveAction = UIAlertAction(title: confirmButtonTitle, style: .default) { _ in
+            guard let taskTitle = self.textFields?.first?.text else { return }
+            guard let taskNote = self.textFields?.last?.text else { return }
+            guard !taskTitle.isEmpty else { return }
+            completionHandler(taskTitle, taskNote)
         }
         
         let cancelAction = UIAlertAction(title: "Cancel", style: .destructive)
@@ -54,9 +52,11 @@ class CustomAlert: UIAlertController {
         addAction(saveAction)
         addTextField { first in
             first.placeholder = "Task title"
+            first.text = task?.name
         }
         addTextField { secondField in
             secondField.placeholder = "Note"
+            secondField.text = task?.note
         }
     }
 }
