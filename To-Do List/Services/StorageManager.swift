@@ -14,12 +14,7 @@ class StorageManager {
     
     private init() {}
     
-    // save task
-    func save(task: Task, to taskGroup: TaskGroup) {
-        write {
-            taskGroup.tasks.append(task)
-        }
-    }
+    // MARK: - Group methods
     
     // save groups
     func save(_ taskGroups: [TaskGroup]) {
@@ -43,17 +38,33 @@ class StorageManager {
         }
     }
     
-    // delete task
-    func delete(_ task: Task) {
-        write {
-            realm.delete(task)
-        }
-    }
-    
     // edit gruop title
     func edit(_ taskGroup: TaskGroup, newTitle: String) {
         write {
             taskGroup.groupName = newTitle
+        }
+    }
+    
+    // complete all tasks in group
+    func done(_ taskGroup: TaskGroup) {
+        write {
+            taskGroup.tasks.setValue(true, forKey: "isComplete")
+        }
+    }
+
+    // MARK: - Task methods
+    
+    // save task
+    func save(task: Task, to taskGroup: TaskGroup) {
+        write {
+            taskGroup.tasks.append(task)
+        }
+    }
+    
+    // delete task
+    func delete(_ task: Task) {
+        write {
+            realm.delete(task)
         }
     }
     
@@ -65,13 +76,6 @@ class StorageManager {
         }
     }
     
-    // complete all tasks in group
-    func done(_ taskGroup: TaskGroup) {
-        write {
-            taskGroup.tasks.setValue(true, forKey: "isComplete")
-        }
-    }
-    
     // edit complete status for task
     func editStatus(_ task: Task, status: Bool) {
         write {
@@ -79,13 +83,15 @@ class StorageManager {
         }
     }
     
+    // MARK: - Database reading
+    
     // safe reading database
     private func write(completion: () -> Void) {
         do {
             try realm.write {
                 completion()
             }
-        } catch let error {
+        } catch {
             print(error)
         }
     }
