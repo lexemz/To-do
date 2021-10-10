@@ -20,7 +20,7 @@ class CustomAlert: UIAlertController {
             completionHandler(groupName)
         }
         
-        let cancelAction = UIAlertAction(title: "Cancel", style: .default)
+        let cancelAction = UIAlertAction(title: "Cancel", style: .destructive)
         
         addAction(cancelAction)
         addAction(saveAction)
@@ -43,7 +43,7 @@ class CustomAlert: UIAlertController {
             
         }
         
-        let cancelAction = UIAlertAction(title: "Cancel", style: .default)
+        let cancelAction = UIAlertAction(title: "Cancel", style: .destructive)
         
         addAction(cancelAction)
         addAction(saveAction)

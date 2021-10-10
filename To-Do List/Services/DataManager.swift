@@ -31,7 +31,7 @@ class DataManager {
             shoppingGroup.tasks.insert(contentsOf: [breadTask, applesTask], at: 1)
 
             DispatchQueue.main.async {
-                StorageManager.shared.saveContext([shoppingGroup])
+                StorageManager.shared.save([shoppingGroup])
                 completion() // нужен для обновления таблицы
             }
         }
