@@ -8,6 +8,8 @@
 import UIKit
 
 class TasksTableViewController: UITableViewController {
+    
+    var taskGroup: TaskGroup!
 
     override func viewDidLoad() {
         super.viewDidLoad()

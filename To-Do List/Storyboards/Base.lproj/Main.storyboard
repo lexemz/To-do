@@ -78,7 +78,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="JfP-XP-zE5">
-                                <rect key="frame" x="0.0" y="44" width="320" height="32"/>
+                                <rect key="frame" x="16" y="44" width="288" height="32"/>
                                 <segments>
                                     <segment title="First"/>
                                     <segment title="Second"/>
@@ -125,16 +125,23 @@
                             <constraint firstItem="hwu-Gd-93u" firstAttribute="bottom" secondItem="Rgo-6Z-WIk" secondAttribute="bottom" id="0UP-1O-xVM"/>
                             <constraint firstItem="Rgo-6Z-WIk" firstAttribute="leading" secondItem="hwu-Gd-93u" secondAttribute="leading" id="8cS-JP-Fo3"/>
                             <constraint firstItem="JfP-XP-zE5" firstAttribute="top" secondItem="hwu-Gd-93u" secondAttribute="top" id="Uyk-Cs-x3i"/>
-                            <constraint firstItem="JfP-XP-zE5" firstAttribute="leading" secondItem="hwu-Gd-93u" secondAttribute="leading" id="b4F-dM-uVN"/>
-                            <constraint firstItem="hwu-Gd-93u" firstAttribute="trailing" secondItem="JfP-XP-zE5" secondAttribute="trailing" id="kWA-8E-FKm"/>
+                            <constraint firstItem="JfP-XP-zE5" firstAttribute="leading" secondItem="hwu-Gd-93u" secondAttribute="leading" constant="16" id="b4F-dM-uVN"/>
+                            <constraint firstItem="hwu-Gd-93u" firstAttribute="trailing" secondItem="JfP-XP-zE5" secondAttribute="trailing" constant="16" id="kWA-8E-FKm"/>
                             <constraint firstItem="Rgo-6Z-WIk" firstAttribute="top" secondItem="JfP-XP-zE5" secondAttribute="bottom" id="vW1-ge-XYH"/>
                             <constraint firstItem="hwu-Gd-93u" firstAttribute="trailing" secondItem="Rgo-6Z-WIk" secondAttribute="trailing" id="xvY-1h-XBn"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="Task Groups" id="TEd-08-xiX"/>
+                    <navigationItem key="navigationItem" title="Task Groups" id="TEd-08-xiX">
+                        <barButtonItem key="rightBarButtonItem" title="Item" image="plus" catalog="system" id="y6X-Bz-R5O">
+                            <connections>
+                                <action selector="addButtonPressed:" destination="rnF-bA-gmF" id="ETy-6h-A12"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
                         <outlet property="segmentedControl" destination="JfP-XP-zE5" id="NU9-1M-U0b"/>
-                        <segue destination="01v-93-8iy" kind="show" id="wI4-7n-uDX"/>
+                        <outlet property="tableView" destination="Rgo-6Z-WIk" id="Jvx-2D-j9v"/>
+                        <segue destination="01v-93-8iy" kind="show" identifier="fromGropToTasks" id="wI4-7n-uDX"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="fhl-RL-e9D" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -143,6 +150,7 @@
         </scene>
     </scenes>
     <resources>
+        <image name="plus" catalog="system" width="128" height="113"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
