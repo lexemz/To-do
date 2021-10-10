@@ -23,10 +23,10 @@ class TaskGroupsViewController: UIViewController {
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        guard let indexPath = tableView.indexPathForSelectedRow else { return }
+        guard let tappedRow = sender as? Int else { return }
         guard let taskTableVC = segue.destination as? TasksTableViewController else { return }
         
-        let taskGroup = taskGroups[indexPath.row]
+        let taskGroup = taskGroups[tappedRow]
         taskTableVC.taskGroup = taskGroup
     }
     
@@ -63,7 +63,7 @@ extension TaskGroupsViewController: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        performSegue(withIdentifier: "fromGroupToTasks", sender: nil)
+        performSegue(withIdentifier: "fromGroupToTasks", sender: indexPath.row)
         tableView.deselectRow(at: indexPath, animated: true)
     }
 }
