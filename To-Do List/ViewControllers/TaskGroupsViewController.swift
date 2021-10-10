@@ -98,8 +98,16 @@ extension TaskGroupsViewController: UITableViewDataSource {
         let groupOfTasks = taskGroups[indexPath.row]
         
         content.text = groupOfTasks.groupName
-        content.secondaryText = "\(groupOfTasks.tasks.count)"
         
+        let completedTasksCount = groupOfTasks.tasks.filter("isComplete = false").count
+        if completedTasksCount == 0 {
+            let imageAttachment = NSTextAttachment()
+            imageAttachment.image = (UIImage(systemName: "checkmark.circle")?.withTintColor(.systemGreen))
+            content.secondaryAttributedText = NSAttributedString(attachment: imageAttachment)
+        } else {
+            content.secondaryAttributedText = NSAttributedString(string: "\(completedTasksCount)")
+        }
+
         cell.contentConfiguration = content
         
         return cell
@@ -138,6 +146,7 @@ extension TaskGroupsViewController: UITableViewDelegate {
 
         let doneAction = UIContextualAction(style: .normal, title: "All Done") { _, _, isDone in
             StorageManager.shared.done(taskGroup)
+            self.tableView.reloadRows(at: [indexPath], with: .automatic)
             isDone(true)
         }
         doneAction.backgroundColor = .systemGreen
