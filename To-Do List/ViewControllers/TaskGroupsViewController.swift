@@ -24,6 +24,13 @@ class TaskGroupsViewController: UIViewController {
         taskGroups = StorageManager.shared.realm.objects(TaskGroup.self)
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        tableView.reloadData()
+        // TODO completed tasks check
+    }
+    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         guard let tappedRow = sender as? Int else { return }
         guard let taskTableVC = segue.destination as? TasksTableViewController else { return }
@@ -41,10 +48,10 @@ class TaskGroupsViewController: UIViewController {
     }
     
     private func saveNewGroup(_ groupName: String) {
-        let group = TaskGroup(value: [groupName])
-        StorageManager.shared.save(group)
+        let newGroup = TaskGroup(value: [groupName])
+        StorageManager.shared.save(newGroup)
         
-        let rowIndex = IndexPath(row: taskGroups.index(of: group) ?? 0, section: 0)
+        let rowIndex = IndexPath(row: taskGroups.index(of: newGroup) ?? 0, section: 0)
         tableView.insertRows(at: [rowIndex], with: .automatic)
     }
     

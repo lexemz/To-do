@@ -25,7 +25,7 @@ class CustomAlert: UIAlertController {
         addAction(cancelAction)
         addAction(saveAction)
         addTextField { textField in
-            textField.placeholder = "Grop Name"
+            textField.placeholder = "Grop title"
         }
     }
     
@@ -48,7 +48,7 @@ class CustomAlert: UIAlertController {
         addAction(cancelAction)
         addAction(saveAction)
         addTextField { first in
-            first.placeholder = "Grop Name"
+            first.placeholder = "Task title"
         }
         addTextField { secondField in
             secondField.placeholder = "Note"
