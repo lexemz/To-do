@@ -22,6 +22,14 @@ class TaskGroupsViewController: UIViewController {
         taskGroups = StorageManager.shared.realm.objects(TaskGroup.self)
     }
     
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        guard let indexPath = tableView.indexPathForSelectedRow else { return }
+        guard let taskTableVC = segue.destination as? TasksTableViewController else { return }
+        
+        let taskGroup = taskGroups[indexPath.row]
+        taskTableVC.taskGroup = taskGroup
+    }
+    
     @IBAction func addButtonPressed(_ sender: Any) {
         
     }
@@ -52,5 +60,10 @@ extension TaskGroupsViewController: UITableViewDataSource, UITableViewDelegate {
         cell.contentConfiguration = content
         
         return cell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        performSegue(withIdentifier: "fromGroupToTasks", sender: nil)
+        tableView.deselectRow(at: indexPath, animated: true)
     }
 }

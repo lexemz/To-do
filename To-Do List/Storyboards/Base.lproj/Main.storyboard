@@ -141,7 +141,7 @@
                     <connections>
                         <outlet property="segmentedControl" destination="JfP-XP-zE5" id="NU9-1M-U0b"/>
                         <outlet property="tableView" destination="Rgo-6Z-WIk" id="Jvx-2D-j9v"/>
-                        <segue destination="01v-93-8iy" kind="show" identifier="fromGropToTasks" id="wI4-7n-uDX"/>
+                        <segue destination="01v-93-8iy" kind="show" identifier="fromGroupToTasks" id="ag7-Ul-rli"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="fhl-RL-e9D" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
