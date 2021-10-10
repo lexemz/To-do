@@ -14,28 +14,28 @@ class StorageManager {
     
     private init() {}
     
-    // сохранение задачи в Persistent с ссылкой на TaskGroup
+    // save task
     func save(task: Task, to taskGroup: TaskGroup) {
         write {
             taskGroup.tasks.append(task)
         }
     }
     
-    // сохранение сущностей в Persistent
+    // save groups
     func save(_ taskGroups: [TaskGroup]) {
         write {
             realm.add(taskGroups)
         }
     }
     
-    // сохранение одной сущности
+    // save group
     func save(_ taskGroup: TaskGroup) {
         write {
             realm.add(taskGroup)
         }
     }
     
-    // удаление группы задач
+    // detele droup
     func delete(_ taskGroup: TaskGroup) {
         write {
             realm.delete(taskGroup.tasks)
@@ -43,19 +43,21 @@ class StorageManager {
         }
     }
     
+    // delete task
     func delete(_ task: Task) {
         write {
             realm.delete(task)
         }
     }
     
-    // изменение заголовка группы задач
+    // edit gruop title
     func edit(_ taskGroup: TaskGroup, newTitle: String) {
         write {
             taskGroup.groupName = newTitle
         }
     }
     
+    // edit tasl
     func edit(_ task: Task, newTitle: String, newNote: String) {
         write {
             task.name = newTitle
@@ -63,20 +65,21 @@ class StorageManager {
         }
     }
     
-    // массовая отметка выполненых задач
+    // complete all tasks in group
     func done(_ taskGroup: TaskGroup) {
         write {
             taskGroup.tasks.setValue(true, forKey: "isComplete")
         }
     }
     
+    // edit complete status for task
     func editStatus(_ task: Task, status: Bool) {
         write {
             task.isComplete = status
         }
     }
     
-    // безопасное чтение БД
+    // safe reading database
     private func write(completion: () -> Void) {
         do {
             try realm.write {
