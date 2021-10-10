@@ -46,14 +46,14 @@ extension TasksTableViewController {
                 StorageManager.shared.edit(task, newTitle: newTitle, newNote: newNote)
                 completion()
             } else {
-                self.save(newTitle, newNote)
+                self.saveTask(newTitle, newNote)
             }
         }
 
         present(alert, animated: true)
     }
 
-    private func save(_ taskTitle: String, _ taskNote: String?) {
+    private func saveTask(_ taskTitle: String, _ taskNote: String?) {
         let newTask = Task(value: [taskTitle, taskNote])
         StorageManager.shared.save(task: newTask, to: taskGroup)
 
@@ -115,6 +115,7 @@ extension TasksTableViewController {
         }
         editAction.backgroundColor = .systemOrange
 
+        tableView.deselectRow(at: indexPath, animated: true)
         return UISwipeActionsConfiguration(actions: [editAction, deteleAction])
     }
 
@@ -145,6 +146,7 @@ extension TasksTableViewController {
         }
         undoneAction.backgroundColor = .systemPink
 
+        tableView.deselectRow(at: indexPath, animated: true)
         return UISwipeActionsConfiguration(actions: [undoneAction])
     }
 }
