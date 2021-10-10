@@ -9,11 +9,16 @@ import UIKit
 
 class CustomAlert: UIAlertController {
     
+    private var confirmButtonTitle = "Save"
+    
     static func createCustomAlert(title: String, subtitle: String) -> CustomAlert {
         CustomAlert(title: title, message: subtitle, preferredStyle: .alert)
     }
 
-    func addGroupAction(completionHandler: @escaping (String) -> Void) {
+    func addGroupAction(with taskGroup: TaskGroup? = nil, completionHandler: @escaping (String) -> Void) {
+        
+        if taskGroup != nil { confirmButtonTitle = "Edit" }
+        
         let saveAction = UIAlertAction(title: "Save", style: .default) { _ in
             guard let groupName = self.textFields?.first?.text else { return }
             guard !groupName.isEmpty else { return }

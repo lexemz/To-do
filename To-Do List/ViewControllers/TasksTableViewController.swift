@@ -8,10 +8,16 @@
 import RealmSwift
 
 class TasksTableViewController: UITableViewController {
+    // MARK: Public Properties
+
     var taskGroup: TaskGroup!
+
+    // MARK: Private Properties
 
     private var activeTasks: Results<Task>!
     private var completedTasks: Results<Task>!
+
+    // MARK: Life cycle methods
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -22,20 +28,28 @@ class TasksTableViewController: UITableViewController {
         completedTasks = taskGroup.tasks.filter("isComplete = true")
     }
 
+    // MARK: IBActions
+
     @IBAction func addButtonPressed(_ sender: UIBarButtonItem) {
+        showAlert()
+    }
+
+    // MARK: Private Methods
+
+    private func showAlert() {
         let alert = CustomAlert.createCustomAlert(title: "Add task", subtitle: "What do you want to add?")
-        
+
         alert.addTaskAction { taskTitle, taskNote in
             self.saveNewTask(taskTitle: taskTitle, taskNote: taskNote)
         }
-        
+
         present(alert, animated: true)
     }
-    
+
     private func saveNewTask(taskTitle: String, taskNote: String?) {
         let newTask = Task(value: [taskTitle, taskNote])
         StorageManager.shared.save(task: newTask, to: taskGroup)
-        
+
         let rowIndex = IndexPath(row: activeTasks.index(of: newTask) ?? 0, section: 0)
         tableView.insertRows(at: [rowIndex], with: .automatic)
     }

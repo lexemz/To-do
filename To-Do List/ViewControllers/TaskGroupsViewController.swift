@@ -5,17 +5,20 @@
 //  Created by Igor on 10.10.2021.
 //
 
-import RealmSwift
 import Foundation
+import RealmSwift
 
 class TaskGroupsViewController: UIViewController {
+    // MARK: IBOutlets
 
-    // MARK: - IBOutlets
     @IBOutlet var tableView: UITableView!
     @IBOutlet var segmentedControl: UISegmentedControl!
     
-    // MARK: - Private properties
+    // MARK: Private properties
+
     private var taskGroups: Results<TaskGroup>!
+    
+    // MARK: Life cycle methods
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -28,8 +31,10 @@ class TaskGroupsViewController: UIViewController {
         super.viewWillAppear(animated)
         
         tableView.reloadData()
-        // TODO completed tasks check
+        // TODO: completed tasks check
     }
+    
+    // MARK: Navigation
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         guard let tappedRow = sender as? Int else { return }
@@ -38,8 +43,26 @@ class TaskGroupsViewController: UIViewController {
         let taskGroup = taskGroups[tappedRow]
         taskTableVC.taskGroup = taskGroup
     }
+
+    // MARK: IBActions
     
     @IBAction func addButtonPressed(_ sender: UIBarButtonItem) {
+        showAlert()
+    }
+
+    // MARK: Private methods
+    
+    private func createDemoData() {
+        DataManager.shared.createDemoData {
+            self.tableView.reloadData()
+        }
+    }
+}
+
+// MARK: - Alet Controller
+
+extension TaskGroupsViewController {
+    private func showAlert() {
         let alert = CustomAlert.createCustomAlert(title: "Add new grop", subtitle: "Type group title")
         alert.addGroupAction { groupTitle in
             self.saveNewGroup(groupTitle)
@@ -54,17 +77,11 @@ class TaskGroupsViewController: UIViewController {
         let rowIndex = IndexPath(row: taskGroups.index(of: newGroup) ?? 0, section: 0)
         tableView.insertRows(at: [rowIndex], with: .automatic)
     }
-    
-    private func createDemoData() {
-        DataManager.shared.createDemoData {
-            self.tableView.reloadData()
-        }
-    }
 }
 
-
 // MARK: - UITableViewDataSource
-extension TaskGroupsViewController: UITableViewDataSource, UITableViewDelegate {
+
+extension TaskGroupsViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         taskGroups.count
     }
@@ -77,14 +94,35 @@ extension TaskGroupsViewController: UITableViewDataSource, UITableViewDelegate {
         content.text = groupOfTasks.groupName
         content.secondaryText = "\(groupOfTasks.tasks.count)"
         
-        
         cell.contentConfiguration = content
         
         return cell
     }
-    
+}
+
+// MARK: - UITableViewDelegate and handlers
+
+extension TaskGroupsViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         performSegue(withIdentifier: "fromGroupToTasks", sender: indexPath.row)
         tableView.deselectRow(at: indexPath, animated: true)
     }
+    
+    func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        let taskGroup = taskGroups[indexPath.row]
+        
+        let deteleAction = UIContextualAction(style: .destructive, title: "Delete") { _, _, _ in
+            StorageManager.shared.delete(taskGroup)
+            tableView.deleteRows(at: [indexPath], with: .automatic)
+        }
+        
+        let editAction = UIContextualAction(style: .normal, title: "Edit") { _, _, _ in
+            self.editHandler()
+        }
+        editAction.backgroundColor = .systemOrange
+        
+        return UISwipeActionsConfiguration(actions: [deteleAction])
+    }
+    
+    private func editHandler() {}
 }
