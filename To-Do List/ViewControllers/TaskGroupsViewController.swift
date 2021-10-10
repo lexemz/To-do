@@ -50,12 +50,13 @@ class TaskGroupsViewController: UIViewController {
     
     @IBAction func segmentedContolIsToggled(_ sender: UISegmentedControl) {
         switch sender.selectedSegmentIndex {
-            case 0:
-                taskGroups = taskGroups.sorted(byKeyPath: "date", ascending: true)
-            default:
-                taskGroups = taskGroups.sorted(byKeyPath: "groupName", ascending: true)
+        case 0:
+            taskGroups = taskGroups.sorted(byKeyPath: "date", ascending: true)
+            reloadRowsWithAnimation(animation: .right)
+        default:
+            taskGroups = taskGroups.sorted(byKeyPath: "groupName", ascending: true)
+            reloadRowsWithAnimation(animation: .left)
         }
-        tableView.reloadData()
     }
     
     // MARK: Private methods
@@ -64,6 +65,17 @@ class TaskGroupsViewController: UIViewController {
         DataManager.shared.createDemoData {
             self.tableView.reloadData()
         }
+    }
+    
+    private func reloadRowsWithAnimation(animation: UITableView.RowAnimation) {
+        var indexPathsToReload: [IndexPath] = []
+        
+        for index in taskGroups.indices {
+            let indexPath = IndexPath(row: index, section: 0)
+            indexPathsToReload.append(indexPath)
+        }
+        
+        tableView.reloadRows(at: indexPathsToReload, with: animation)
     }
 }
 
@@ -78,19 +90,35 @@ extension TaskGroupsViewController {
                 StorageManager.shared.edit(taskGroup, newTitle: groupTitle)
                 completion()
             } else {
-                self.save(groupTitle)
+                self.saveGroup(groupTitle)
             }
         }
         
         present(alert, animated: true)
     }
     
-    private func save(_ groupName: String) {
+    private func saveGroup(_ groupName: String) {
         let newGroup = TaskGroup(value: [groupName])
         StorageManager.shared.save(newGroup)
         
         let rowIndex = IndexPath(row: taskGroups.index(of: newGroup) ?? 0, section: 0)
         tableView.insertRows(at: [rowIndex], with: .automatic)
+    }
+    
+    private func defineSymbolForGroupTaskCount(group: TaskGroup) -> NSAttributedString {
+        let groupActiveTasks = group.tasks.filter("isComplete = false").count
+        let groupCompletedTasks = group.tasks.filter("isComplete = true").count
+        
+        switch (groupActiveTasks, groupCompletedTasks) {
+        case _ where groupActiveTasks == 0 && groupCompletedTasks == 0:
+            return NSAttributedString(string: "0")
+        case _ where groupActiveTasks == 0 && groupCompletedTasks != 0:
+            let imageAttachment = NSTextAttachment()
+            imageAttachment.image = (UIImage(systemName: "checkmark.circle")?.withTintColor(.systemGreen))
+            return NSAttributedString(attachment: imageAttachment)
+        default:
+            return NSAttributedString(string: "\(groupActiveTasks)")
+        }
     }
 }
 
@@ -107,17 +135,10 @@ extension TaskGroupsViewController: UITableViewDataSource {
         let groupOfTasks = taskGroups[indexPath.row]
         
         content.text = groupOfTasks.groupName
+        content.secondaryAttributedText = defineSymbolForGroupTaskCount(group: groupOfTasks)
         
-        let completedTasksCount = groupOfTasks.tasks.filter("isComplete = false").count
-        if completedTasksCount == 0 {
-            let imageAttachment = NSTextAttachment()
-            imageAttachment.image = (UIImage(systemName: "checkmark.circle")?.withTintColor(.systemGreen))
-            content.secondaryAttributedText = NSAttributedString(attachment: imageAttachment)
-        } else {
-            content.secondaryAttributedText = NSAttributedString(string: "\(completedTasksCount)")
-        }
-
         cell.contentConfiguration = content
+        cell.accessoryType = .disclosureIndicator
         
         return cell
     }
