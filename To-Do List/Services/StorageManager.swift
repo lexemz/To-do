@@ -15,7 +15,7 @@ class StorageManager {
     private init() {}
     
     // сохранение задачи в Persistent с ссылкой на TaskGroup
-    func save(_ task: Task, to taskGroup: TaskGroup) {
+    func save(task: Task, to taskGroup: TaskGroup) {
         write {
             taskGroup.tasks.append(task)
         }
