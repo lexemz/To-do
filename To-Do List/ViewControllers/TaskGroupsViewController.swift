@@ -62,15 +62,22 @@ class TaskGroupsViewController: UIViewController {
 // MARK: - Alet Controller
 
 extension TaskGroupsViewController {
-    private func showAlert() {
-        let alert = CustomAlert.createCustomAlert(title: "Add new grop", subtitle: "Type group title")
-        alert.addGroupAction { groupTitle in
-            self.saveNewGroup(groupTitle)
+    private func showAlert(with taskGroup: TaskGroup? = nil, completion: (() -> Void)? = nil) {
+        let alert = CustomAlert.groupAlert(title: "Add New Group", subtitle: "Type group title")
+        
+        alert.addGroupAction(with: taskGroup) { groupTitle in
+            if let taskGroup = taskGroup, let completion = completion {
+                StorageManager.shared.edit(taskGroup, newTitle: groupTitle)
+                completion()
+            } else {
+                self.save(groupTitle)
+            }
         }
+        
         present(alert, animated: true)
     }
     
-    private func saveNewGroup(_ groupName: String) {
+    private func save(_ groupName: String) {
         let newGroup = TaskGroup(value: [groupName])
         StorageManager.shared.save(newGroup)
         
@@ -100,7 +107,7 @@ extension TaskGroupsViewController: UITableViewDataSource {
     }
 }
 
-// MARK: - UITableViewDelegate and handlers
+// MARK: - UITableViewDelegate
 
 extension TaskGroupsViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -116,13 +123,14 @@ extension TaskGroupsViewController: UITableViewDelegate {
             tableView.deleteRows(at: [indexPath], with: .automatic)
         }
         
-        let editAction = UIContextualAction(style: .normal, title: "Edit") { _, _, _ in
-            self.editHandler()
+        let editAction = UIContextualAction(style: .normal, title: "Edit") { _, _, isDone in
+            self.showAlert(with: taskGroup) {
+                tableView.reloadRows(at: [indexPath], with: .automatic)
+            }
+            isDone(true)
         }
         editAction.backgroundColor = .systemOrange
         
-        return UISwipeActionsConfiguration(actions: [deteleAction])
+        return UISwipeActionsConfiguration(actions: [editAction, deteleAction])
     }
-    
-    private func editHandler() {}
 }

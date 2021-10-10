@@ -37,7 +37,7 @@ class TasksTableViewController: UITableViewController {
     // MARK: Private Methods
 
     private func showAlert() {
-        let alert = CustomAlert.createCustomAlert(title: "Add task", subtitle: "What do you want to add?")
+        let alert = CustomAlert.groupAlert(title: "Add task", subtitle: "What do you want to add?")
 
         alert.addTaskAction { taskTitle, taskNote in
             self.saveNewTask(taskTitle: taskTitle, taskNote: taskNote)

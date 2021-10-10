@@ -11,7 +11,7 @@ class CustomAlert: UIAlertController {
     
     private var confirmButtonTitle = "Save"
     
-    static func createCustomAlert(title: String, subtitle: String) -> CustomAlert {
+    static func groupAlert(title: String, subtitle: String) -> CustomAlert {
         CustomAlert(title: title, message: subtitle, preferredStyle: .alert)
     }
 
@@ -19,7 +19,7 @@ class CustomAlert: UIAlertController {
         
         if taskGroup != nil { confirmButtonTitle = "Edit" }
         
-        let saveAction = UIAlertAction(title: "Save", style: .default) { _ in
+        let saveAction = UIAlertAction(title: confirmButtonTitle, style: .default) { _ in
             guard let groupName = self.textFields?.first?.text else { return }
             guard !groupName.isEmpty else { return }
             completionHandler(groupName)
@@ -31,6 +31,7 @@ class CustomAlert: UIAlertController {
         addAction(saveAction)
         addTextField { textField in
             textField.placeholder = "Grop title"
+            textField.text = taskGroup?.groupName
         }
     }
     
@@ -42,7 +43,6 @@ class CustomAlert: UIAlertController {
             if let taskNote = self.textFields?.last?.text, !taskNote.isEmpty {
                 completionHandler(taskName, taskNote)
             } else {
-                
                 completionHandler(taskName, "")
             }
             
