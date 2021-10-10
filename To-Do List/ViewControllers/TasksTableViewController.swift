@@ -8,16 +8,16 @@
 import RealmSwift
 
 class TasksTableViewController: UITableViewController {
-    // MARK: Public Properties
+    // MARK: - Public Properties
 
     var taskGroup: TaskGroup!
 
-    // MARK: Private Properties
+    // MARK: - Private Properties
 
     private var activeTasks: Results<Task>!
     private var completedTasks: Results<Task>!
 
-    // MARK: Life cycle methods
+    // MARK: - Life cycle methods
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -28,7 +28,7 @@ class TasksTableViewController: UITableViewController {
         completedTasks = taskGroup.tasks.filter("isComplete = true")
     }
 
-    // MARK: IBActions
+    // MARK: - IBActions
 
     @IBAction func addButtonPressed(_ sender: UIBarButtonItem) {
         showAlert()
@@ -121,16 +121,16 @@ extension TasksTableViewController {
 
     override func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         var actions: [UIContextualAction] = []
-        
+
         if indexPath.section == 0 {
             actions.append(createDoneActionForRow(indexPath))
         } else {
             actions.append(createUndoneActionForRow(indexPath))
         }
-        
+
         return UISwipeActionsConfiguration(actions: actions)
     }
-    
+
     private func createDoneActionForRow(_ indexPath: IndexPath) -> UIContextualAction {
         let task = activeTasks[indexPath.row]
 
@@ -142,10 +142,10 @@ extension TasksTableViewController {
             self.tableView.moveRow(at: indexPath, to: completedTasksRowIndex)
         }
         doneAction.backgroundColor = .systemGreen
-        
+
         return doneAction
     }
-    
+
     private func createUndoneActionForRow(_ indexPath: IndexPath) -> UIContextualAction {
         let task = completedTasks[indexPath.row]
 
@@ -157,7 +157,7 @@ extension TasksTableViewController {
             self.tableView.moveRow(at: indexPath, to: activeTasksRowIndex)
         }
         undoneAction.backgroundColor = .systemPink
-        
+
         return undoneAction
     }
 }

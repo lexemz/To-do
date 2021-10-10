@@ -9,15 +9,15 @@ import RealmSwift
 import UIKit
 
 class TaskGroupsViewController: UIViewController {
-    // MARK: IBOutlets
+    // MARK: - IBOutlets
 
     @IBOutlet var tableView: UITableView!
     
-    // MARK: Private properties
+    // MARK: - Private properties
 
     private var taskGroups: Results<TaskGroup>!
     
-    // MARK: Life cycle methods
+    // MARK: - Life cycle methods
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -32,7 +32,7 @@ class TaskGroupsViewController: UIViewController {
         // TODO: completed tasks check
     }
     
-    // MARK: Navigation
+    // MARK: - Navigation
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         guard let tappedRow = sender as? Int else { return }
@@ -42,7 +42,7 @@ class TaskGroupsViewController: UIViewController {
         taskTableVC.taskGroup = taskGroup
     }
 
-    // MARK: IBActions
+    // MARK: - IBActions
     
     @IBAction func addButtonPressed(_ sender: UIBarButtonItem) {
         showAlert()
@@ -59,7 +59,7 @@ class TaskGroupsViewController: UIViewController {
         }
     }
     
-    // MARK: Private methods
+    // MARK: - Private methods
     
     private func createDemoData() {
         DataManager.shared.createDemoData {
