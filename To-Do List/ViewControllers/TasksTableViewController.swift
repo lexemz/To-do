@@ -91,7 +91,7 @@ extension TasksTableViewController {
     }
 }
 
-// MARK: - UITableViewDelegate
+// MARK: - UITableViewDelegate and handlers
 
 extension TasksTableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -120,21 +120,33 @@ extension TasksTableViewController {
     }
 
     override func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        var actions: [UIContextualAction] = []
+        
         if indexPath.section == 0 {
-            let task = activeTasks[indexPath.row]
-
-            let doneAction = UIContextualAction(style: .normal, title: "Done") { _, _, isDone in
-                StorageManager.shared.editStatus(task, status: true)
-                isDone(true)
-
-                let completedTasksRowIndex = IndexPath(row: self.completedTasks.index(of: task) ?? 0, section: 1)
-                self.tableView.moveRow(at: indexPath, to: completedTasksRowIndex)
-            }
-            doneAction.backgroundColor = .systemGreen
-
-            return UISwipeActionsConfiguration(actions: [doneAction])
+            actions.append(createDoneActionForRow(indexPath))
+        } else {
+            actions.append(createUndoneActionForRow(indexPath))
         }
+        
+        return UISwipeActionsConfiguration(actions: actions)
+    }
+    
+    private func createDoneActionForRow(_ indexPath: IndexPath) -> UIContextualAction {
+        let task = activeTasks[indexPath.row]
 
+        let doneAction = UIContextualAction(style: .normal, title: "Done") { _, _, isDone in
+            StorageManager.shared.editStatus(task, status: true)
+            isDone(true)
+
+            let completedTasksRowIndex = IndexPath(row: self.completedTasks.index(of: task) ?? 0, section: 1)
+            self.tableView.moveRow(at: indexPath, to: completedTasksRowIndex)
+        }
+        doneAction.backgroundColor = .systemGreen
+        
+        return doneAction
+    }
+    
+    private func createUndoneActionForRow(_ indexPath: IndexPath) -> UIContextualAction {
         let task = completedTasks[indexPath.row]
 
         let undoneAction = UIContextualAction(style: .normal, title: "Undone") { _, _, isDone in
@@ -145,8 +157,7 @@ extension TasksTableViewController {
             self.tableView.moveRow(at: indexPath, to: activeTasksRowIndex)
         }
         undoneAction.backgroundColor = .systemPink
-
-        tableView.deselectRow(at: indexPath, animated: true)
-        return UISwipeActionsConfiguration(actions: [undoneAction])
+        
+        return undoneAction
     }
 }
