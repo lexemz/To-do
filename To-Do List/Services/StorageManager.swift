@@ -35,6 +35,28 @@ class StorageManager {
         }
     }
     
+    // удаление группы задач
+    func delete(_ taskGroup: TaskGroup) {
+        write {
+            realm.delete(taskGroup.tasks)
+            realm.delete(taskGroup)
+        }
+    }
+    
+    // изменение заголовка группы задач
+    func edit(_ taskGroup: TaskGroup, newTitle: String) {
+        write {
+            taskGroup.groupName = newTitle
+        }
+    }
+    
+    // массовая отметка выполненых задач
+    func done(_ taskGroup: TaskGroup) {
+        write {
+            taskGroup.tasks.setValue(true, forKey: "isComplete")
+        }
+    }
+    
     // безопасное чтение БД
     private func write(completion: () -> Void) {
         do {
