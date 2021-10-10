@@ -47,7 +47,13 @@
                             <outlet property="delegate" destination="01v-93-8iy" id="w81-al-O6B"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="Tasks" id="JT1-WY-ZPH"/>
+                    <navigationItem key="navigationItem" title="Tasks" id="JT1-WY-ZPH">
+                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="HXz-I6-MwI">
+                            <connections>
+                                <action selector="addButtonPressed:" destination="01v-93-8iy" id="7S7-2r-6WR"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="pfg-qM-Uko" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -132,9 +138,9 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Task Groups" id="TEd-08-xiX">
-                        <barButtonItem key="rightBarButtonItem" title="Item" image="plus" catalog="system" id="y6X-Bz-R5O">
+                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="y6X-Bz-R5O">
                             <connections>
-                                <action selector="addButtonPressed:" destination="rnF-bA-gmF" id="ETy-6h-A12"/>
+                                <action selector="addButtonPressed:" destination="rnF-bA-gmF" id="jxs-tb-JY9"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -150,7 +156,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="plus" catalog="system" width="128" height="113"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>

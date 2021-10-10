@@ -32,7 +32,7 @@ class TaskGroupsViewController: UIViewController {
         taskTableVC.taskGroup = taskGroup
     }
     
-    @IBAction func addButtonPressed(_ sender: Any) {
+    @IBAction func addButtonPressed(_ sender: UIBarButtonItem) {
         let alert = CustomAlert.createCustomAlert(title: "Add new grop", subtitle: "Type group title")
         alert.addGroupAction { groupTitle in
             self.saveNewGroup(groupTitle)
