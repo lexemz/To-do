@@ -7,18 +7,12 @@
 
 import UIKit
 
-class UICustomAlert: UIAlertController {
+class CustomAlert: UIAlertController {
     
-    private let alert: UIAlertController
-    
-    init(title: String, subtitle: String) {
-        alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+    static func createCustomAlert(title: String, subtitle: String) -> CustomAlert {
+        CustomAlert(title: title, message: subtitle, preferredStyle: .alert)
     }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
+
     func addGroupAction(completionHandler: @escaping (String) -> Void) {
         let saveAction = UIAlertAction(title: "Save", style: .default) { _ in
             guard let groupName = self.textFields?.first?.text else { return }
@@ -60,5 +54,4 @@ class UICustomAlert: UIAlertController {
             secondField.placeholder = "Note"
         }
     }
-    
 }

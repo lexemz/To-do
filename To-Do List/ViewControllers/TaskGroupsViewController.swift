@@ -11,22 +11,24 @@ class TaskGroupsViewController: UIViewController {
 
     @IBOutlet var segmentedControl: UISegmentedControl!
     
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
     }
-
-
 }
 
 
 // MARK: - UITableViewDataSource
 extension TaskGroupsViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        <#code#>
+        0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        <#code#>
+        let cell = tableView.dequeueReusableCell(withIdentifier: "groupCell", for: indexPath)
+        
+        return cell
     }
 }
