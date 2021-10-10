@@ -43,6 +43,12 @@ class StorageManager {
         }
     }
     
+    func delete(_ task: Task) {
+        write {
+            realm.delete(task)
+        }
+    }
+    
     // изменение заголовка группы задач
     func edit(_ taskGroup: TaskGroup, newTitle: String) {
         write {
@@ -50,10 +56,23 @@ class StorageManager {
         }
     }
     
+    func edit(_ task: Task, newTitle: String, newNote: String) {
+        write {
+            task.name = newTitle
+            task.note = newNote
+        }
+    }
+    
     // массовая отметка выполненых задач
     func done(_ taskGroup: TaskGroup) {
         write {
             taskGroup.tasks.setValue(true, forKey: "isComplete")
+        }
+    }
+    
+    func editStatus(_ task: Task, status: Bool) {
+        write {
+            task.isComplete = status
         }
     }
     
