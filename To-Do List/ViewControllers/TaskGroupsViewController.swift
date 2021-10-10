@@ -10,9 +10,11 @@ import Foundation
 
 class TaskGroupsViewController: UIViewController {
 
+    // MARK: - IBOutlets
     @IBOutlet var tableView: UITableView!
     @IBOutlet var segmentedControl: UISegmentedControl!
     
+    // MARK: - Private properties
     private var taskGroups: Results<TaskGroup>!
     
     override func viewDidLoad() {
@@ -31,7 +33,19 @@ class TaskGroupsViewController: UIViewController {
     }
     
     @IBAction func addButtonPressed(_ sender: Any) {
+        let alert = CustomAlert.createCustomAlert(title: "Add new grop", subtitle: "Type group title")
+        alert.addGroupAction { groupTitle in
+            self.saveNewGroup(groupTitle)
+        }
+        present(alert, animated: true)
+    }
+    
+    private func saveNewGroup(_ groupName: String) {
+        let group = TaskGroup(value: [groupName])
+        StorageManager.shared.save(group)
         
+        let rowIndex = IndexPath(row: taskGroups.index(of: group) ?? 0, section: 0)
+        tableView.insertRows(at: [rowIndex], with: .automatic)
     }
     
     private func createDemoData() {
