@@ -12,7 +12,6 @@ class TaskGroupsViewController: UIViewController {
     // MARK: IBOutlets
 
     @IBOutlet var tableView: UITableView!
-    @IBOutlet var segmentedControl: UISegmentedControl!
     
     // MARK: Private properties
 
@@ -48,7 +47,17 @@ class TaskGroupsViewController: UIViewController {
     @IBAction func addButtonPressed(_ sender: UIBarButtonItem) {
         showAlert()
     }
-
+    
+    @IBAction func segmentedContolIsToggled(_ sender: UISegmentedControl) {
+        switch sender.selectedSegmentIndex {
+            case 0:
+                taskGroups = taskGroups.sorted(byKeyPath: "date", ascending: true)
+            default:
+                taskGroups = taskGroups.sorted(byKeyPath: "groupName", ascending: true)
+        }
+        tableView.reloadData()
+    }
+    
     // MARK: Private methods
     
     private func createDemoData() {

@@ -84,11 +84,14 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="JfP-XP-zE5">
-                                <rect key="frame" x="16" y="44" width="288" height="32"/>
+                                <rect key="frame" x="1" y="44" width="318" height="32"/>
                                 <segments>
-                                    <segment title="First"/>
-                                    <segment title="Second"/>
+                                    <segment title="Date"/>
+                                    <segment title="A-Z"/>
                                 </segments>
+                                <connections>
+                                    <action selector="segmentedContolIsToggled:" destination="rnF-bA-gmF" eventType="valueChanged" id="DtX-HK-bPP"/>
+                                </connections>
                             </segmentedControl>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="Rgo-6Z-WIk">
                                 <rect key="frame" x="0.0" y="75" width="320" height="493"/>
@@ -131,8 +134,8 @@
                             <constraint firstItem="hwu-Gd-93u" firstAttribute="bottom" secondItem="Rgo-6Z-WIk" secondAttribute="bottom" id="0UP-1O-xVM"/>
                             <constraint firstItem="Rgo-6Z-WIk" firstAttribute="leading" secondItem="hwu-Gd-93u" secondAttribute="leading" id="8cS-JP-Fo3"/>
                             <constraint firstItem="JfP-XP-zE5" firstAttribute="top" secondItem="hwu-Gd-93u" secondAttribute="top" id="Uyk-Cs-x3i"/>
-                            <constraint firstItem="JfP-XP-zE5" firstAttribute="leading" secondItem="hwu-Gd-93u" secondAttribute="leading" constant="16" id="b4F-dM-uVN"/>
-                            <constraint firstItem="hwu-Gd-93u" firstAttribute="trailing" secondItem="JfP-XP-zE5" secondAttribute="trailing" constant="16" id="kWA-8E-FKm"/>
+                            <constraint firstItem="JfP-XP-zE5" firstAttribute="leading" secondItem="hwu-Gd-93u" secondAttribute="leading" constant="1" id="b4F-dM-uVN"/>
+                            <constraint firstItem="hwu-Gd-93u" firstAttribute="trailing" secondItem="JfP-XP-zE5" secondAttribute="trailing" constant="1" id="kWA-8E-FKm"/>
                             <constraint firstItem="Rgo-6Z-WIk" firstAttribute="top" secondItem="JfP-XP-zE5" secondAttribute="bottom" id="vW1-ge-XYH"/>
                             <constraint firstItem="hwu-Gd-93u" firstAttribute="trailing" secondItem="Rgo-6Z-WIk" secondAttribute="trailing" id="xvY-1h-XBn"/>
                         </constraints>
@@ -145,7 +148,6 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
-                        <outlet property="segmentedControl" destination="JfP-XP-zE5" id="NU9-1M-U0b"/>
                         <outlet property="tableView" destination="Rgo-6Z-WIk" id="Jvx-2D-j9v"/>
                         <segue destination="01v-93-8iy" kind="show" identifier="fromGroupToTasks" id="ag7-Ul-rli"/>
                     </connections>
